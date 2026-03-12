@@ -47,10 +47,9 @@ This project uses the following technologies:
 
 - **React** – UI library
 - **Vite** – Fast development environment
-- **Tailwind CSS** – Utility-first styling
 - **Framer Motion** – UI animations
 - **Lucide React** – Icons
-- **shadcn/ui** – UI components
+- **Node.js
 
 
 
