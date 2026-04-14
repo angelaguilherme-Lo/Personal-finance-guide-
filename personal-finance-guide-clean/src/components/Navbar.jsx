@@ -1,29 +1,45 @@
-export default function Navbar({ setPage, currency, setCurrency }) {
-  const pages = ["dashboard", "expenses", "budget", "education"];
-  const currencies = ["USD", "EUR", "GBP", "JPY"];
+const pages = [
+  { id: "dashboard", label: "Overview" },
+  { id: "expenses", label: "Expenses" },
+  { id: "budget", label: "Budget" },
+  { id: "education", label: "Tips" },
+];
 
+export default function Navbar({ page, setPage, currency, setCurrency }) {
   return (
-    <div className="navbar">
-      <h1>Finance Guide</h1>
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        {pages.map((p) => (
-          <button key={p} onClick={() => setPage(p)}>
-            {p.charAt(0).toUpperCase() + p.slice(1)}
-          </button>
-        ))}
-
-        {/* Currency selector */}
-        <select
-          value={currency}
-          onChange={(e) => setCurrency(e.target.value)}
-          className="input"
-          style={{ maxWidth: "100px" }}
-        >
-          {currencies.map((c) => (
-            <option key={c} value={c}>{c}</option>
-          ))}
-        </select>
+    <header className="topbar">
+      <div>
+        <p className="brand-kicker">Personal finance guide</p>
+        <h1>Track smarter, spend with clarity.</h1>
       </div>
-    </div>
+
+      <div className="topbar-actions">
+        <nav className="nav-pills" aria-label="Primary navigation">
+          {pages.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={page === item.id ? "is-active" : ""}
+              onClick={() => setPage(item.id)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+
+        <label className="currency-switcher">
+          <span>Display currency</span>
+          <select
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value)}
+          >
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+            <option value="JPY">JPY</option>
+          </select>
+        </label>
+      </div>
+    </header>
   );
 }

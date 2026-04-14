@@ -1,31 +1,62 @@
-import { convertCurrency } from "../utils/currency";
+import { convertCurrency, formatMoney } from "../utils/currency";
 
-export default function ExpenseList({ expenses = [], displayCurrency = "USD" }) {
-  if (!Array.isArray(expenses)) return null; // Safety check
+export default function ExpenseList({
+  expenses = [],
+  displayCurrency = "USD",
+  onEdit,
+  onDelete,
+}) {
+  if (!expenses.length) {
+    return (
+      <div className="empty-state">
+        <p>No expenses yet. Add your first entry to build your tracker.</p>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      {expenses.map((exp) => {
-        const converted = convertCurrency(
-          exp.amount || 0,
-          exp.currency || "USD",
+    <div className="expense-stack">
+      {expenses.map((expense) => {
+        const convertedAmount = convertCurrency(
+          expense.amount,
+          expense.currency,
           displayCurrency
         );
 
         return (
-          <div key={exp.id} className="expense-item">
-            <span>{exp.name || "Unnamed"}</span>
-            <span>
-              {new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: exp.currency || "USD",
-              }).format(exp.amount || 0)} →{" "}
-              {new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: displayCurrency,
-              }).format(converted)}
-            </span>
-          </div>
+          <article className="expense-row" key={expense.id}>
+            <div>
+              <div className="expense-row-top">
+                <h3>{expense.name}</h3>
+                <span className="expense-tag">{expense.category}</span>
+              </div>
+              <p>
+                Saved in {expense.currency} · Displayed in {displayCurrency}
+              </p>
+            </div>
+
+            <div className="expense-row-actions">
+              <strong>{formatMoney(convertedAmount, displayCurrency)}</strong>
+
+              <div className="action-group">
+                <button
+                  className="btn btn-ghost"
+                  type="button"
+                  onClick={() => onEdit(expense)}
+                >
+                  Edit
+                </button>
+
+                <button
+                  className="btn btn-danger"
+                  type="button"
+                  onClick={() => onDelete(expense.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </article>
         );
       })}
     </div>
